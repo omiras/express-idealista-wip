@@ -1,8 +1,10 @@
 const pisos = [{
     titulo: 'Casa Rústica',
-    precio: 500
+    foto: 'https://i.picsum.photos/id/1008/5616/3744.jpg?hmac=906z84ml4jhqPMsm4ObF9aZhCRC-t2S_Sy0RLvYWZwY',
+    precio: 500,
 }, {
     titulo: 'Palacete',
+    foto: 'https://i.picsum.photos/id/101/2621/1747.jpg?hmac=cu15YGotS0gIYdBbR1he5NtBLZAAY6aIY5AbORRAngs',
     precio: 800
 }]
 
@@ -13,6 +15,11 @@ const express = require('express');
 
 // tenemos que ejecutar la función importada para obtener un objeto del tipo Express
 const app = express();
+
+// .set es un método que permite confgiurar nuestro servidor. 
+// "pon la variable 'view engine' con el valor 'ejs' " <--> A partir de ahora, mi aplicación Express va a utilizar el motor de plantillas EJS. IMPORTANTE! Tenemos que tener instalado 'ejs' con npm para que esto funcione!
+
+app.set('view engine', 'ejs');
 
 // Queremos que express nos informe de los datos pasados mediante POST en el cuerpo del mensaje
 app.use(express.urlencoded({ extended: false}))
@@ -45,21 +52,16 @@ app.get('/pisos', (req, res)=> {
 }) 
 
 app.get('/buscar', (req, res)=> {
-    
-    // La mayoría de lenguajes de programación, tienen variables globales que nos permiten saber en que directorio se está ejecutando nuestra aplicación
-    console.log(__dirname);
-    console.log(__filename);
-
-    //disponemos del método sendFile para enviar un fichero al cliente. Para poder enviar un fichero, necesiamos la ruta absoluta desde la raiz de nuestro sistema de fichero hasta el fichero que queremos enviar 
-
-    //Para construir la ruta absoluta, usaremos path.join
-    const ruta = path.join(__dirname, 'html', 'buscador.html')
-    console.log("ruta: ", ruta)
-
-    res.sendFile(ruta);
+    res.render('buscador')
 })
 
 app.get('/nuevo-piso', (req, res) => {
+
+     // La mayoría de lenguajes de programación, tienen variables globales que nos permiten saber en que directorio se está ejecutando nuestra aplicación
+     console.log(__dirname);
+     console.log(__filename);
+ 
+     //disponemos del método sendFile para enviar un fichero al cliente. Para poder enviar un fichero, necesiamos la ruta absoluta desde la raiz de nuestro sistema de fichero hasta el fichero que queremos enviar 
     const ruta = path.join(__dirname, 'html', 'nuevopiso.html')
     console.log("ruta: ", ruta)
 
@@ -78,6 +80,14 @@ app.post('/nuevo-piso', (req, res) => {
     })
 
     res.redirect('/pisos'); // haz una petición GET a '/pisos'
+})
+
+app.get('/mostrar-pisos', (req, res) => {
+    // Esto nos va a renderizar la plantilla index.ejs. No es necesario poner views/index; porque por defecto siempre Express irá a buscar los archivos que queremos renderizar a la carpeta 'views'. Además, tampoco hace falta poner la extensión; porque ya hemos definido que nuestro motor de plantillas es EJS. 
+    res.render('index', {
+        totalPisos: pisos.length,
+        todosLosPisos: pisos
+    });
 })
 
 
