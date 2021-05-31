@@ -88,6 +88,12 @@ app.post('/nuevo-piso', (req, res) => {
 
 app.get('/mostrar-pisos', (req, res) => {
     // Esto nos va a renderizar la plantilla index.ejs. No es necesario poner views/index; porque por defecto siempre Express irá a buscar los archivos que queremos renderizar a la carpeta 'views'. Además, tampoco hace falta poner la extensión; porque ya hemos definido que nuestro motor de plantillas es EJS. 
+
+    // mirar la querystring
+    // manipular el array de pisos para pasarselo a la vista en función de los filtros activados por el usuario (o el orden)
+
+    // pisos.sort
+
     res.render('index', {
         totalPisos: pisos.length,
         todosLosPisos: pisos
